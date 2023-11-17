@@ -1,0 +1,62 @@
+# This is a basic workflow to help you get started with Actions
+
+name: DevFest PR Check Action
+
+# Controls when the workflow will run
+on:
+  pull_request:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  validation:
+    name: 'Run test and build android code'
+    runs-on: ubuntu-latest
+    concurrency:
+      cancel-in-progress: true
+      group: ${{ github.event.pull_request.number || github.event.pull_request_target.number || github.ref }}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request_target.head.ref || github.event.pull_request.head.ref }}
+        repository: ${{ github.event.pull_request_target.head.repo.full_name || github.event.pull_request.head.repo.full_name}}
+    - name:  Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '11'
+    - name: Install Flutter 
+      uses: subosito/flutter-action@v2.8.0
+      with:
+        flutter-version: '3.13.7'
+        channel: 'stable'
+    - name: build apk debug
+      run: flutter build apk --debug
+  ios_validation:
+    name: 'iOS validation'
+    runs-on: macos-latest
+    concurrency:
+      cancel-in-progress: true
+      group: ${{ github.event.pull_request.number || github.event.pull_request_target.number || github.ref }}
+    needs: validation
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request_target.head.ref || github.event.pull_request.head.ref }}
+        repository: ${{ github.event.pull_request_target.head.repo.full_name || github.event.pull_request.head.repo.full_name}}
+    - name: 'check if need to run ios'
+      run: |
+        echo "can_run=$(git diff --name-status origin ios/)" >> $GITHUB_OUTPUT
+    - name: Install Flutter
+      if: ${{ env.can_run != '' }}
+      uses: subosito/flutter-action@v2.8.0
+      with:
+        flutter-version: '3.13.7'
+        channel: 'stable'
+    - name: build iOS no codesign
+      if: ${{ env.can_run != '' }}
+      run: flutter build ipa --no-codesign
