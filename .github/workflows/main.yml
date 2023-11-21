@@ -30,9 +30,9 @@ jobs:
         distribution: 'zulu'
         java-version: '11'
     - name: Install Flutter 
-      uses: subosito/flutter-action@v2.8.0
+      uses: subosito/flutter-action@v2.12.0
       with:
-        flutter-version: '3.13.7'
+        flutter-version: '3.13.9'
         channel: 'stable'
     - name: build apk debug
       run: flutter build apk --debug
