@@ -15,13 +15,13 @@ Steps by steps to integrate Firebase project into Flutter app:
 - Enable Google sign in provider
 - Enable Firebase Cloud Firestore
 - in terminal, navigate to this project directory
-- in terminal, run Flutter CLI to configure this project: 'flutterfire configure --project=<your project name>'
+- in terminal, run Flutter CLI to configure this project: 'flutterfire configure --project=your-project-name'
 - follow on screen guide to complete Flutter CLI configuration
 
 To run this project for Android platform
 - open https://console.firebase.google.com/, go to your project, and check that apps are created
 - in terminal, run this command to get Android debug keystore sha: keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
-- copy Android debug SHA1, and to go https://console.firebase.google.com/project/<your-project-name>, open Project Setting, select Android app, and click on Add Fingerprint, and paste your SHA1 fingerprint here, then click Save
+- copy Android debug SHA1, and to go https://console.firebase.google.com/project/your-project-name, open Project Setting, select Android app, and click on Add Fingerprint, and paste your SHA1 fingerprint here, then click Save
 - Now your app is ready to run on Android
 
 To run this project for iOS platform:
