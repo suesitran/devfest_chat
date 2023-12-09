@@ -41,8 +41,10 @@ To run this project for Web platform:
 # Resources 
 ### Flutter
 https://flutter.dev/
+
 https://docs.flutter.dev/
 
 ### Firebase
 https://console.firebase.google.com/
+
 https://firebase.google.com/docs
