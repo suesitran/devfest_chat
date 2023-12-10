@@ -37,3 +37,14 @@ To run this project for Web platform:
 - go back to your IDE, and open web/index.html
 - search for key 'google-signin-client_id', and replace content value with Web Client ID copied above
 - If there's error, check if your People API is enabled. Go to https://console.cloud.google.com/, select APIs & Services => Enabled APIs & Services, search for Google People API, and ensure it's enabled.
+
+# Resources 
+### Flutter
+https://flutter.dev/
+
+https://docs.flutter.dev/
+
+### Firebase
+https://console.firebase.google.com/
+
+https://firebase.google.com/docs
