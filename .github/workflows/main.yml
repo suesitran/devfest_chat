@@ -29,7 +29,7 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: '11'
-    - name: Install Flutter 
+    - name: Install Flutter
       uses: subosito/flutter-action@v2.12.0
       with:
         flutter-version: '3.16.0'
@@ -52,6 +52,7 @@ jobs:
     - name: 'check if need to run ios'
       run: |
         echo "can_run=$(git diff --name-status origin/main ios/ pubspec.yaml packages/*/pubspec.yaml .github/ | wc -l)" >> $GITHUB_OUTPUT
+        cat $GITHUB_OUTPUT
     - name: Install Flutter
       if: ${{ steps.ios-validation.outputs.can_run > 0 }}
       uses: subosito/flutter-action@v2.8.0
