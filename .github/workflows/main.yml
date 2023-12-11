@@ -50,6 +50,7 @@ jobs:
         repository: ${{ github.event.pull_request_target.head.repo.full_name || github.event.pull_request.head.repo.full_name}}
         fetch-depth: 0
     - name: 'check if need to run ios'
+      id: ios-validation
       run: |
         echo "can_run=$(git diff --name-status origin/main ios/ pubspec.yaml packages/*/pubspec.yaml .github/ | wc -l)" >> $GITHUB_OUTPUT
         cat $GITHUB_OUTPUT
