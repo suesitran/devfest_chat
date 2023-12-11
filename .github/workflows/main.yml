@@ -48,15 +48,16 @@ jobs:
       with:
         ref: ${{ github.event.pull_request_target.head.ref || github.event.pull_request.head.ref }}
         repository: ${{ github.event.pull_request_target.head.repo.full_name || github.event.pull_request.head.repo.full_name}}
+        fetch-depth: 0
     - name: 'check if need to run ios'
       run: |
-        echo "can_run=$(git diff --name-status origin ios/)" >> $GITHUB_OUTPUT
+        echo "can_run=$(git diff --name-status origin/dev ios/ pubspec.yaml packages/*/pubspec.yaml .github/ | wc -l)" >> $GITHUB_OUTPUT
     - name: Install Flutter
-      if: ${{ env.can_run != '' }}
+      if: ${{ steps.ios-validation.outputs.can_run > 0 }}
       uses: subosito/flutter-action@v2.8.0
       with:
         flutter-version: '3.16.0'
         channel: 'stable'
     - name: build iOS no codesign
-      if: ${{ env.can_run != '' }}
+      if: ${{ steps.ios-validation.outputs.can_run > 0 }}
       run: flutter build ipa --no-codesign
