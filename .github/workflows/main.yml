@@ -36,7 +36,7 @@ jobs:
         channel: 'stable'
     - name: build apk debug
       run: flutter build apk --debug
-  ios_validation:
+  ios-validation:
     name: 'iOS validation'
     runs-on: macos-latest
     concurrency:
