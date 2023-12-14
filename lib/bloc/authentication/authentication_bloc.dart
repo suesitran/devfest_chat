@@ -30,7 +30,15 @@ class AuthenticationBloc
     });
 
     on<SignInWithGoogleEvent>((event, emit) async {
-      signInWithGoogle();
+      try {
+        await signInWithGoogle();
+      } on PlatformException catch (e) {
+        emit(AuthenticationError(e.toString()));
+      } on FirebaseAuthException catch (e) {
+        emit(AuthenticationError(e.toString()));
+      } catch (e) {
+        emit(AuthenticationError(e.toString()));
+      }
     });
 
     on<RequestSignOutEvent>((event, emit) async {
@@ -43,14 +51,10 @@ class AuthenticationBloc
     final GoogleSignIn googleSignIn =
         GoogleSignIn(scopes: ['email', 'profile']);
     GoogleSignInAccount? googleUser;
-    try {
-      googleUser = await googleSignIn.signIn();
-    } on PlatformException catch (e) {
-      return null;
-    }
+    googleUser = await googleSignIn.signIn();
 
     if (googleUser == null) {
-      return null;
+      throw Exception('User cancel');
     }
 
     final GoogleSignInAuthentication googleAuth =
@@ -60,28 +64,22 @@ class AuthenticationBloc
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-    try {
-      final UserCredential userCredential =
-          await firebaseAuth.signInWithCredential(oAuthCredential);
-      final User? user = userCredential.user;
+    final UserCredential userCredential =
+        await firebaseAuth.signInWithCredential(oAuthCredential);
+    final User? user = userCredential.user;
 
-      if (user == null) {
-        return null;
-      }
-
-      // save user detail
-      FirebaseFirestore.instance.collection('members').doc(user.uid).set(
-          UserDetail(
-                  uid: user.uid,
-                  displayName: user.displayName ?? _defaultDisplayName,
-                  avatar: user.photoURL)
-              .toMap());
-
-      return user;
-    } on FirebaseAuthException catch (_) {
-      return null;
-    } catch (e) {
-      return null;
+    if (user == null) {
+      throw Exception('Failed to validate with Firebase Auth');
     }
+
+    // save user detail
+    FirebaseFirestore.instance.collection('members').doc(user.uid).set(
+        UserDetail(
+                uid: user.uid,
+                displayName: user.displayName ?? _defaultDisplayName,
+                avatar: user.photoURL)
+            .toMap());
+
+    return user;
   }
 }

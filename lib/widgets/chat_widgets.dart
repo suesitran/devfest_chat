@@ -24,7 +24,8 @@ class ChatBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> children = [
       BlocProvider<UserDetailBloc>(
-        create: (context) => UserDetailBloc()..add(LoadUserDetailEvent(senderUid)),
+        create: (context) =>
+            UserDetailBloc()..add(LoadUserDetailEvent(senderUid)),
         child: BlocBuilder<UserDetailBloc, UserDetailState>(
           builder: (context, state) {
             if (state is UserDetailLoaded) {
@@ -65,7 +66,8 @@ class ChatBubble extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8.0),
       alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
       child: Row(
-        mainAxisAlignment: isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment:
+            isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: children,
       ),
     );
@@ -98,7 +100,11 @@ class _MessageBoxViewState extends State<MessageBoxView> {
             prefixIcon: const CircleAvatar(
               radius: 15,
               backgroundColor: const Color(0xFF9398A7),
-              child: Icon(Icons.camera_alt, color: Colors.white, size: 15,),
+              child: Icon(
+                Icons.camera_alt,
+                color: Colors.white,
+                size: 15,
+              ),
             ),
             prefixIconConstraints: const BoxConstraints(
               minWidth: 50,
@@ -107,7 +113,11 @@ class _MessageBoxViewState extends State<MessageBoxView> {
               child: const CircleAvatar(
                 radius: 15,
                 backgroundColor: Color(0xFF9398A7),
-                child: Icon(Icons.send, color: Colors.white, size: 15,),
+                child: Icon(
+                  Icons.send,
+                  color: Colors.white,
+                  size: 15,
+                ),
               ),
               onTap: () {
                 final String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -221,7 +231,10 @@ class UserAvatarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (avatar == null) {
-      return Icon(Icons.question_mark, size: size,);
+      return Icon(
+        Icons.question_mark,
+        size: size,
+      );
     }
 
     return CircleAvatar(

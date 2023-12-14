@@ -10,6 +10,8 @@ class AuthenticationInitial extends AuthenticationState {
 }
 
 class Unauthenticated extends AuthenticationState {
+  const Unauthenticated();
+
   @override
   List<Object?> get props => [];
 }
@@ -17,8 +19,17 @@ class Unauthenticated extends AuthenticationState {
 class Authenticated extends AuthenticationState {
   final User user;
 
-  Authenticated(this.user);
+  const Authenticated(this.user);
 
   @override
   List<Object?> get props => [user];
+}
+
+class AuthenticationError extends AuthenticationState {
+  final String error;
+
+  const AuthenticationError(this.error);
+
+  @override
+  List<Object?> get props => [error];
 }

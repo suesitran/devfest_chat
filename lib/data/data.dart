@@ -31,9 +31,6 @@ class UserDetail {
         displayName = map['displayName'],
         avatar = map['avatar'];
 
-  Map<String, dynamic> toMap() => {
-    'uid' : uid,
-    'displayName':displayName,
-    'avatar': avatar
-  };
+  Map<String, dynamic> toMap() =>
+      {'uid': uid, 'displayName': displayName, 'avatar': avatar};
 }
