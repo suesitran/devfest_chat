@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:devfest_chat/bloc/authentication/authentication_bloc.dart';
+import 'package:devfest_chat/bloc/chat/chat_bloc.dart';
+import 'package:devfest_chat/bloc/user_detail/user_detail_bloc.dart';
 import 'package:devfest_chat/firebase_options.dart';
-import 'package:devfest_chat/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:devfest_chat/widgets/chat_widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-import 'chat_widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,81 +21,97 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Public chat'),
-          actions: [
-            StreamBuilder<User?>(
-              stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (context, snapshot) => snapshot.data == null
-                  ? SizedBox.shrink()
-                  : TextButton(
-                      onPressed: () => LoginWithGoogle().signOut(),
-                      child: Text(
-                        'Sign out',
-                        style: TextStyle(color: Colors.white),
-                      )),
-            )
-          ],
+        home: MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthenticationBloc>(
+          create: (context) =>
+              AuthenticationBloc()..add(ValidateAuthenticationEvent()),
         ),
-        body: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            final User? user = snapshot.data;
+        BlocProvider<ChatBloc>(
+          create: (context) => ChatBloc(),
+        ),
+      ],
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text('Public Chat'),
+            actions: [
+              BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, state) {
+                  if (state is Authenticated) {
+                    return TextButton(
+                        onPressed: () {
+                          context
+                              .read<AuthenticationBloc>()
+                              .add(RequestSignOutEvent());
+                        },
+                        child: Text('Sign out'));
+                  }
 
-            if (user == null) {
-              // unauthenticated
+                  return SizedBox.shrink();
+                },
+              )
+            ],
+          ),
+          body: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+            listener: (context, state) {
+              if (state is Authenticated) {
+                context.read<ChatBloc>().add(LoadChatEvent(state.user));
+              }
+
+              if (state is AuthenticationError) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Error: ${state.error}"),
+                ));
+              }
+            },
+            builder: (context, state) {
+              if (state is Authenticated) {
+                return BlocBuilder<ChatBloc, ChatState>(
+                    builder: (context, state) {
+                  if (state is ChatLoaded) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Expanded(
+                              child: ListView(
+                            reverse: true,
+                            children: state.messages
+                                .map((e) => ChatBubble(
+                                    text: e.message,
+                                    senderUid: e.senderUid,
+                                    isMine: e.senderUid == state.uid))
+                                .toList(),
+                          )),
+                          MessageBoxView(
+                            onSend: (value) => context
+                                .read<ChatBloc>()
+                                .add(SendChatMessage(value)),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                });
+              }
+
+              // not authenticated
               return Center(
                 child: TextButton(
-                  child: Text('Sign in'),
                   onPressed: () {
-                    // TODO google sign in
-                    LoginWithGoogle().signIn();
+                    context
+                        .read<AuthenticationBloc>()
+                        .add(SignInWithGoogleEvent());
                   },
+                  child: Text('Sign in'),
                 ),
               );
-            }
-
-            return StreamBuilder<QuerySnapshot<Message>>(
-              stream: FirebaseFirestore.instance
-                  .collection('messages')
-                  .orderBy('time', descending: true)
-                  .withConverter(
-                    fromFirestore: (snapshot, options) =>
-                        Message.fromMap(snapshot.id, snapshot.data() ?? {}),
-                    toFirestore: (value, options) => value.toMap(),
-                  )
-                  .snapshots(includeMetadataChanges: true),
-              builder: (context, snapshot) {
-                final QuerySnapshot<Message>? data = snapshot.data;
-                return Column(
-                  children: [
-                    Expanded(
-                        child: ListView(
-                      reverse: true,
-                      children: data?.docs.map((e) {
-                            final Message message = e.data();
-
-                            return ChatBubble(
-                                text: message.message,
-                                senderUid: message.senderUid,
-                                isMine: message.senderUid == user.uid);
-                          }).toList() ??
-                          [],
-                    )),
-                    MessageBoxView(
-                      onSend: (value) => FirebaseFirestore.instance
-                          .collection('messages')
-                          .doc()
-                          .set(value.toMap()),
-                    )
-                  ],
-                );
-              },
-            );
-          },
-        ),
-      ),
-    );
+            },
+          )),
+    ));
   }
 }

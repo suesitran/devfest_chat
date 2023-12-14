@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -46,32 +49,24 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAVllEgr5fKtGPfP6OKEa4ZpqqLE1vQBxw',
-    appId: '1:727475414374:web:cd381c35a14926671c14a7',
-    messagingSenderId: '727475414374',
-    projectId: 'public-chat-b906a',
-    authDomain: 'public-chat-b906a.firebaseapp.com',
-    storageBucket: 'public-chat-b906a.appspot.com',
-    measurementId: 'G-0KHTW7F6EV',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBbd9IaqAwkh0BunJJn5cwkVRr0q-eN5dQ',
-    appId: '1:727475414374:android:96ac6fe8da0705fd1c14a7',
+    apiKey: 'AIzaSyBPzyoHS5Lr5H4wJOAtEb-LQcwP-JguBXQ',
+    appId: '1:727475414374:android:42088e59fb760fc01c14a7',
     messagingSenderId: '727475414374',
     projectId: 'public-chat-b906a',
     storageBucket: 'public-chat-b906a.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBOYdDCuaeGRpfjbL5WTXuPXmh9JqE5epM',
-    appId: '1:727475414374:ios:28b138f3996a7de91c14a7',
+    apiKey: 'AIzaSyBXPTGTfmcZ2LXrpxFUHm5A8qFxo-mv2Dc',
+    appId: '1:727475414374:ios:cfe88c32f9cb1d7a1c14a7',
     messagingSenderId: '727475414374',
     projectId: 'public-chat-b906a',
     storageBucket: 'public-chat-b906a.appspot.com',
-    androidClientId: '727475414374-g8j3vpncs2kdcv1nh2f5shsnlcuth2tg.apps.googleusercontent.com',
-    iosClientId: '727475414374-64rhrjc5c05qj6ou04bd58ppc4s7qht0.apps.googleusercontent.com',
+    androidClientId:
+        '727475414374-scfog7prmv3u4kqterhl0gabopn3k7on.apps.googleusercontent.com',
+    iosClientId:
+        '727475414374-380orqdfeqjcs28rra5tnip5np195otj.apps.googleusercontent.com',
     iosBundleId: 'com.example.devfestChat',
   );
 }

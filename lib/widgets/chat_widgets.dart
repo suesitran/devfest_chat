@@ -1,9 +1,11 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:devfest_chat/google_sign_in.dart';
+import 'package:devfest_chat/bloc/user_detail/user_detail_bloc.dart';
+import 'package:devfest_chat/data/data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Chat bubble to display sent messages
 class ChatBubble extends StatelessWidget {
@@ -21,14 +23,18 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [
-      StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('members')
-            .doc(senderUid)
-            .snapshots(),
-        builder: (context, snapshot) => UserAvatarView(
-          avatar: snapshot.data?['avatar'],
-          size: 20,
+      BlocProvider<UserDetailBloc>(
+        create: (context) =>
+            UserDetailBloc()..add(LoadUserDetailEvent(senderUid)),
+        child: BlocBuilder<UserDetailBloc, UserDetailState>(
+          builder: (context, state) {
+            if (state is UserDetailLoaded) {
+              return UserAvatarView(avatar: state.userDetail.avatar);
+            }
+
+            // user default avatar
+            return UserAvatarView(avatar: null);
+          },
         ),
       ),
       SizedBox(
@@ -60,7 +66,8 @@ class ChatBubble extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 8.0),
       alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
       child: Row(
-        mainAxisAlignment: isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment:
+            isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: children,
       ),
     );
@@ -93,7 +100,11 @@ class _MessageBoxViewState extends State<MessageBoxView> {
             prefixIcon: const CircleAvatar(
               radius: 15,
               backgroundColor: const Color(0xFF9398A7),
-              child: Icon(Icons.camera_alt, color: Colors.white, size: 15,),
+              child: Icon(
+                Icons.camera_alt,
+                color: Colors.white,
+                size: 15,
+              ),
             ),
             prefixIconConstraints: const BoxConstraints(
               minWidth: 50,
@@ -102,7 +113,11 @@ class _MessageBoxViewState extends State<MessageBoxView> {
               child: const CircleAvatar(
                 radius: 15,
                 backgroundColor: Color(0xFF9398A7),
-                child: Icon(Icons.send, color: Colors.white, size: 15,),
+                child: Icon(
+                  Icons.send,
+                  color: Colors.white,
+                  size: 15,
+                ),
               ),
               onTap: () {
                 final String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -216,7 +231,10 @@ class UserAvatarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (avatar == null) {
-      return Icon(Icons.question_mark, size: size,);
+      return Icon(
+        Icons.question_mark,
+        size: size,
+      );
     }
 
     return CircleAvatar(
@@ -232,23 +250,4 @@ class UserAvatarView extends StatelessWidget {
 
     return AssetImage(path);
   }
-}
-
-/// data classes
-class Message {
-  final String id;
-  final DateTime time;
-  final String senderUid;
-  final String message;
-
-  Message({required this.time, required this.senderUid, required this.message})
-      : id = '';
-
-  Message.fromMap(this.id, Map<String, dynamic> map)
-      : time = (map['time'] as Timestamp).toDate(),
-        senderUid = map['from'],
-        message = map['message'];
-
-  Map<String, dynamic> toMap() =>
-      {'time': Timestamp.fromDate(time), 'from': senderUid, 'message': message};
 }
