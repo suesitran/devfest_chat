@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devfest_chat/bloc/user_detail/user_detail_bloc.dart';
 import 'package:devfest_chat/data/data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,11 +32,11 @@ class ChatBubble extends StatelessWidget {
             }
 
             // user default avatar
-            return UserAvatarView(avatar: null);
+            return const UserAvatarView(avatar: null);
           },
         ),
       ),
-      SizedBox(
+      const SizedBox(
         width: 4,
       ),
       Flexible(
@@ -53,7 +52,7 @@ class ChatBubble extends StatelessWidget {
           ),
         ),
       ),
-      SizedBox(
+      const SizedBox(
         width: 50,
       )
     ];
@@ -63,7 +62,7 @@ class ChatBubble extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
       child: Row(
         mainAxisAlignment:
@@ -99,7 +98,7 @@ class _MessageBoxViewState extends State<MessageBoxView> {
             fillColor: const Color(0xFF3D4354),
             prefixIcon: const CircleAvatar(
               radius: 15,
-              backgroundColor: const Color(0xFF9398A7),
+              backgroundColor: Color(0xFF9398A7),
               child: Icon(
                 Icons.camera_alt,
                 color: Colors.white,
@@ -130,7 +129,7 @@ class _MessageBoxViewState extends State<MessageBoxView> {
                 }
               },
             ),
-            suffixIconConstraints: BoxConstraints(minWidth: 50)),
+            suffixIconConstraints: const BoxConstraints(minWidth: 50)),
       );
 
   InputBorder get inputBorder =>

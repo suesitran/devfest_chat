@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devfest_chat/data/data.dart';
 import 'package:equatable/equatable.dart';
@@ -21,7 +21,7 @@ class AuthenticationBloc
         FirebaseAuth.instance.authStateChanges(),
         onData: (user) {
           if (user == null) {
-            return Unauthenticated();
+            return const Unauthenticated();
           }
 
           return Authenticated(user);

@@ -1,6 +1,5 @@
 import 'package:devfest_chat/bloc/authentication/authentication_bloc.dart';
 import 'package:devfest_chat/bloc/chat/chat_bloc.dart';
-import 'package:devfest_chat/bloc/user_detail/user_detail_bloc.dart';
 import 'package:devfest_chat/firebase_options.dart';
 import 'package:devfest_chat/widgets/chat_widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -33,7 +32,7 @@ class MainApp extends StatelessWidget {
       ],
       child: Scaffold(
           appBar: AppBar(
-            title: Text('Public Chat'),
+            title: const Text('Public Chat'),
             actions: [
               BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 builder: (context, state) {
@@ -44,10 +43,10 @@ class MainApp extends StatelessWidget {
                               .read<AuthenticationBloc>()
                               .add(RequestSignOutEvent());
                         },
-                        child: Text('Sign out'));
+                        child: const Text('Sign out'));
                   }
 
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 },
               )
             ],
@@ -93,7 +92,7 @@ class MainApp extends StatelessWidget {
                     );
                   }
 
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 });
@@ -107,7 +106,7 @@ class MainApp extends StatelessWidget {
                         .read<AuthenticationBloc>()
                         .add(SignInWithGoogleEvent());
                   },
-                  child: Text('Sign in'),
+                  child: const Text('Sign in'),
                 ),
               );
             },

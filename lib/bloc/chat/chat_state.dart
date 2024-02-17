@@ -13,7 +13,7 @@ class ChatLoaded extends ChatState {
   final String uid;
   final List<Message> messages;
 
-  ChatLoaded(this.uid, this.messages);
+  const ChatLoaded(this.uid, this.messages);
 
   @override
   List<Object?> get props => messages;

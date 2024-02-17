@@ -7,7 +7,7 @@ abstract class UserDetailEvent extends Equatable {
 class LoadUserDetailEvent extends UserDetailEvent {
   final String uid;
 
-  LoadUserDetailEvent(this.uid);
+  const LoadUserDetailEvent(this.uid);
 
   @override
   List<Object?> get props => [uid];

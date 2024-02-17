@@ -12,7 +12,7 @@ class UserDetailInitial extends UserDetailState {
 class UserDetailLoaded extends UserDetailState {
   final UserDetail userDetail;
 
-  UserDetailLoaded(this.userDetail);
+  const UserDetailLoaded(this.userDetail);
 
   @override
   List<Object?> get props => [userDetail];
