@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,6 +46,16 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCUwWWuEC9X_hoefFy7Kjre8nKN6S3_kyw',
+    appId: '1:727475414374:web:d31343957475812e1c14a7',
+    messagingSenderId: '727475414374',
+    projectId: 'public-chat-b906a',
+    authDomain: 'public-chat-b906a.firebaseapp.com',
+    storageBucket: 'public-chat-b906a.appspot.com',
+    measurementId: 'G-40Q4GGVSXZ',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBPzyoHS5Lr5H4wJOAtEb-LQcwP-JguBXQ',
     appId: '1:727475414374:android:42088e59fb760fc01c14a7',
@@ -63,10 +70,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '727475414374',
     projectId: 'public-chat-b906a',
     storageBucket: 'public-chat-b906a.appspot.com',
-    androidClientId:
-        '727475414374-scfog7prmv3u4kqterhl0gabopn3k7on.apps.googleusercontent.com',
-    iosClientId:
-        '727475414374-380orqdfeqjcs28rra5tnip5np195otj.apps.googleusercontent.com',
+    androidClientId: '727475414374-5fho65r4k644fqt9541c7c1cgr7ddf3h.apps.googleusercontent.com',
+    iosClientId: '727475414374-380orqdfeqjcs28rra5tnip5np195otj.apps.googleusercontent.com',
     iosBundleId: 'com.example.devfestChat',
   );
 }

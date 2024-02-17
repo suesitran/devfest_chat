@@ -20,6 +20,14 @@
             "package_name": "com.example.devfest_chat",
             "certificate_hash": "16a07689f0c2fe6474def8ea2165009e24e1f866"
           }
+        },
+        {
+          "client_id": "727475414374-u6aas629o60nsisjp045u8a9h0sjfa1p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.devfest_chat",
+            "certificate_hash": "aaad987606966f9b40c6ab737d2c914eb7216005"
+          }
         }
       ],
       "api_key": [
