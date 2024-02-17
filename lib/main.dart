@@ -1,6 +1,7 @@
 import 'package:devfest_chat/bloc/authentication/authentication_bloc.dart';
 import 'package:devfest_chat/bloc/chat/chat_bloc.dart';
 import 'package:devfest_chat/firebase_options.dart';
+import 'package:devfest_chat/generated/l10n.dart';
 import 'package:devfest_chat/widgets/chat_widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,10 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: const [
+        S.delegate,
+      ],
+        supportedLocales: S.delegate.supportedLocales,
         home: MultiBlocProvider(
       providers: [
         BlocProvider<AuthenticationBloc>(
@@ -32,7 +37,7 @@ class MainApp extends StatelessWidget {
       ],
       child: Scaffold(
           appBar: AppBar(
-            title: const Text('Public Chat'),
+            title: Text(S.current.appTitle),
             actions: [
               BlocBuilder<AuthenticationBloc, AuthenticationState>(
                 builder: (context, state) {
@@ -43,7 +48,7 @@ class MainApp extends StatelessWidget {
                               .read<AuthenticationBloc>()
                               .add(RequestSignOutEvent());
                         },
-                        child: const Text('Sign out'));
+                        child: Text(S.current.signOut));
                   }
 
                   return const SizedBox.shrink();
@@ -59,7 +64,7 @@ class MainApp extends StatelessWidget {
 
               if (state is AuthenticationError) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("Error: ${state.error}"),
+                  content: Text(S.current.error(state.error)),
                 ));
               }
             },
@@ -106,7 +111,7 @@ class MainApp extends StatelessWidget {
                         .read<AuthenticationBloc>()
                         .add(SignInWithGoogleEvent());
                   },
-                  child: const Text('Sign in'),
+                  child: Text(S.current.signIn),
                 ),
               );
             },
