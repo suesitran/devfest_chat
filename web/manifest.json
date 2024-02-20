@@ -1,6 +1,6 @@
 {
-    "name": "firebase_chat",
-    "short_name": "firebase_chat",
+    "name": "devfest_chat",
+    "short_name": "devfest_chat",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
