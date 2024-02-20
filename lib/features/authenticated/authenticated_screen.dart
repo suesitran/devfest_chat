@@ -22,26 +22,32 @@ enum AuthenticatedTabs {
       padding: const EdgeInsets.all(8.0),
       child: switch (this) {
         AuthenticatedTabs.publicChat => Text(S.current.appTitle),
-        _ => Text('GenAI')
+        _ => Text(S.current.genai)
       },
     );
   }
 }
 
-class _AuthenticatedScreenState extends State<AuthenticatedScreen> with TickerProviderStateMixin {
+class _AuthenticatedScreenState extends State<AuthenticatedScreen>
+    with TickerProviderStateMixin {
   late final TabController _controller = TabController(length: 2, vsync: this);
 
   @override
   Widget build(BuildContext context) => Column(
-    children: [
-      TabBar(tabs: AuthenticatedTabs.values.map((e) => e.widget).toList(), controller: _controller,),
-      Expanded(child: TabBarView(
-        controller: _controller,
         children: [
-          PublicChatScreen(uid: widget.uid),
-          GenaiScreen(uid: widget.uid)
+          TabBar(
+            tabs: AuthenticatedTabs.values.map((e) => e.widget).toList(),
+            controller: _controller,
+          ),
+          Expanded(
+              child: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: _controller,
+            children: [
+              PublicChatScreen(uid: widget.uid),
+              GenaiScreen(uid: widget.uid)
+            ],
+          ))
         ],
-      ))
-    ],
-  );
+      );
 }

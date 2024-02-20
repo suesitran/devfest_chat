@@ -2,9 +2,11 @@ import 'dart:math';
 
 import 'package:devfest_chat/bloc/user_detail/user_detail_bloc.dart';
 import 'package:devfest_chat/data/data.dart';
+import 'package:devfest_chat/gen/assets.gen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 /// Chat bubble to display sent messages
 class ChatBubble extends StatelessWidget {
@@ -32,7 +34,8 @@ class ChatBubble extends StatelessWidget {
             }
 
             // user default avatar
-            return const UserAvatarView(avatar: null);
+            return UserAvatarView(
+                avatar: senderUid == 'model' ? 'model' : null);
           },
         ),
       ),
@@ -230,23 +233,44 @@ class UserAvatarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (avatar == null) {
-      return Icon(
-        Icons.question_mark,
-        size: size,
+      return SvgPicture.asset(
+        Assets.anonymous,
+        width: size,
+        height: size,
       );
     }
 
-    return CircleAvatar(
-      backgroundImage: _getImageProvider(avatar!),
-      radius: size,
-    );
-  }
-
-  ImageProvider _getImageProvider(String path) {
-    if (path.startsWith('http')) {
-      return NetworkImage(path);
+    if (avatar == 'model') {
+      return SvgPicture.asset(
+        Assets.gemini,
+        width: size,
+        height: size,
+      );
     }
 
-    return AssetImage(path);
+    // return CircleAvatar(
+    //   backgroundImage: _getImageProvider(avatar!),
+    //   radius: size,
+    // );
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(size),
+      child: avatar == 'model'
+          ? SvgPicture.asset(
+              Assets.gemini,
+              width: size,
+              height: size,
+            )
+          : Image.network(
+              avatar!,
+              width: size,
+              height: size,
+              errorBuilder: (context, error, stackTrace) => SvgPicture.asset(
+                Assets.anonymous,
+                width: size,
+                height: size,
+              ),
+            ),
+    );
   }
 }

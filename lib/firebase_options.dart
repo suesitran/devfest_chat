@@ -70,8 +70,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '727475414374',
     projectId: 'public-chat-b906a',
     storageBucket: 'public-chat-b906a.appspot.com',
-    androidClientId: '727475414374-5fho65r4k644fqt9541c7c1cgr7ddf3h.apps.googleusercontent.com',
-    iosClientId: '727475414374-380orqdfeqjcs28rra5tnip5np195otj.apps.googleusercontent.com',
+    androidClientId:
+        '727475414374-5fho65r4k644fqt9541c7c1cgr7ddf3h.apps.googleusercontent.com',
+    iosClientId:
+        '727475414374-380orqdfeqjcs28rra5tnip5np195otj.apps.googleusercontent.com',
     iosBundleId: 'com.example.devfestChat',
   );
 }

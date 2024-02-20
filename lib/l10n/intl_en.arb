@@ -3,5 +3,6 @@
   "appTitle": "Public Chat",
   "signOut": "Sign Out",
   "error": "Error: ${error}",
-  "signIn": "Sign In"
+  "signIn": "Sign In",
+  "genai": "GenAI"
 }

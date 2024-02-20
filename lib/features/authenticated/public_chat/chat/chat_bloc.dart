@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devfest_chat/data/data.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 part 'chat_event.dart';
 part 'chat_state.dart';
@@ -26,8 +25,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 toFirestore: (value, options) => value.toMap(),
               )
               .snapshots(includeMetadataChanges: true), onData: (data) {
-        return ChatLoaded(
-            event.uid, data.docs.map((e) => e.data()).toList());
+        return ChatLoaded(event.uid, data.docs.map((e) => e.data()).toList());
       });
     });
 

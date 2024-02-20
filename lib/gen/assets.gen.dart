@@ -13,9 +13,10 @@ class Assets {
   Assets._();
 
   static const String anonymous = 'assets/anonymous.svg';
+  static const String gemini = 'assets/gemini.svg';
 
   /// List of all assets
-  List<String> get values => [anonymous];
+  List<String> get values => [anonymous, gemini];
 }
 
 class AssetGenImage {

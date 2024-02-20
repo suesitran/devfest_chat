@@ -79,12 +79,11 @@ class AuthenticationBloc
     }
 
     // save user detail
-    _firebaseFirestore.collection('members').doc(user.uid).set(
-        UserDetail(
-                uid: user.uid,
-                displayName: user.displayName ?? _defaultDisplayName,
-                avatar: user.photoURL)
-            .toMap());
+    _firebaseFirestore.collection('members').doc(user.uid).set(UserDetail(
+            uid: user.uid,
+            displayName: user.displayName ?? _defaultDisplayName,
+            avatar: user.photoURL)
+        .toMap());
 
     return user;
   }

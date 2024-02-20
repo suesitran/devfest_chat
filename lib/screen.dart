@@ -1,12 +1,10 @@
 import 'package:devfest_chat/features/authenticated/authenticated_screen.dart';
-import 'package:devfest_chat/features/authenticated/public_chat/public_chat_screen.dart';
 import 'package:devfest_chat/features/unauthenticated/unauthenticated_screen.dart';
-import 'package:devfest_chat/gen/assets.gen.dart';
+import 'package:devfest_chat/widgets/chat_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_chat/generated/l10n.dart';
 import 'package:devfest_chat/bloc/authentication/authentication_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -27,15 +25,13 @@ class MainScreen extends StatelessWidget {
                     },
                     child: Row(
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(25.0),
-                          child: Image.network(state.user.photoURL!,
-                              width: 45,
-                              height: 45,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  SvgPicture.asset(Assets.anonymous)),
+                        UserAvatarView(
+                          avatar: state.user.photoURL,
+                          size: 45,
                         ),
-                        const SizedBox(width: 8.0,),
+                        const SizedBox(
+                          width: 8.0,
+                        ),
                         Text(S.current.signOut)
                       ],
                     ));

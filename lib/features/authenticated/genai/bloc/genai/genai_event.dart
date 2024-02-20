@@ -9,11 +9,16 @@ class StartChat extends GenaiEvent {
   List<Object?> get props => [];
 }
 
-class OnMessageReceived extends GenaiEvent {
+class StartChatStreaming extends GenaiEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class SendChatToGenAI extends GenaiEvent {
   final String sender;
   final String message;
 
-  const OnMessageReceived({required this.sender, required this.message});
+  const SendChatToGenAI({required this.sender, required this.message});
 
   @override
   List<Object?> get props => [sender, message];
