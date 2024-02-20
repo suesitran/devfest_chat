@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../widgets/chat_widgets.dart';
-import 'bloc/chat/chat_bloc.dart';
+import '../../../widgets/chat_widgets.dart';
+import 'chat/chat_bloc.dart';
 
 class PublicChatScreen extends StatelessWidget {
   final String uid;

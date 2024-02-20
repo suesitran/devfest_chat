@@ -1,4 +1,5 @@
-import 'package:devfest_chat/features/authenticated/public_chat_screen.dart';
+import 'package:devfest_chat/features/authenticated/authenticated_screen.dart';
+import 'package:devfest_chat/features/authenticated/public_chat/public_chat_screen.dart';
 import 'package:devfest_chat/features/unauthenticated/unauthenticated_screen.dart';
 import 'package:devfest_chat/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
@@ -55,9 +56,7 @@ class MainScreen extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is Authenticated) {
-            return PublicChatScreen(
-              uid: state.user.uid,
-            );
+            return AuthenticatedScreen(uid: state.user.uid);
           }
 
           return const UnauthenticatedView();

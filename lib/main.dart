@@ -1,5 +1,5 @@
 import 'package:devfest_chat/bloc/authentication/authentication_bloc.dart';
-import 'package:devfest_chat/features/authenticated/bloc/chat/chat_bloc.dart';
+import 'package:devfest_chat/features/authenticated/public_chat/chat/chat_bloc.dart';
 import 'package:devfest_chat/firebase_options.dart';
 import 'package:devfest_chat/generated/l10n.dart';
 import 'package:devfest_chat/screen.dart';
