@@ -10,10 +10,14 @@ part 'chat_state.dart';
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final String _collectionMessages = 'messages';
 
-  ChatBloc() : super(ChatInitial()) {
+  final FirebaseFirestore _firebaseFirestore;
+
+  ChatBloc({FirebaseFirestore? firebaseFirestore})
+      : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
+        super(ChatInitial()) {
     on<LoadChatEvent>((event, emit) async {
       await emit.forEach(
-          FirebaseFirestore.instance
+          _firebaseFirestore
               .collection(_collectionMessages)
               .orderBy('time', descending: true)
               .withConverter(
@@ -28,7 +32,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
 
     on<SendChatMessage>((event, emit) async {
-      FirebaseFirestore.instance
+      _firebaseFirestore
           .collection(_collectionMessages)
           .doc()
           .set(event.message.toMap());

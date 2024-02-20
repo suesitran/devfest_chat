@@ -9,10 +9,14 @@ part 'user_detail_state.dart';
 class UserDetailBloc extends Bloc<UserDetailEvent, UserDetailState> {
   final String _collectionMembers = 'members';
 
-  UserDetailBloc() : super(UserDetailInitial()) {
+  final FirebaseFirestore _firebaseFirestore;
+
+  UserDetailBloc({FirebaseFirestore? firebaseFirestore})
+      : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
+        super(UserDetailInitial()) {
     on<LoadUserDetailEvent>((event, emit) async {
       await emit.forEach(
-        FirebaseFirestore.instance
+        _firebaseFirestore
             .collection(_collectionMembers)
             .doc(event.uid)
             .withConverter(

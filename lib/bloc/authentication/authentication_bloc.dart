@@ -15,10 +15,17 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final String _defaultDisplayName = 'Unknown';
 
-  AuthenticationBloc() : super(AuthenticationInitial()) {
+  final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firebaseFirestore;
+
+  AuthenticationBloc(
+      {FirebaseAuth? firebaseAuth, FirebaseFirestore? firebaseFirestore})
+      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
+        _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
+        super(AuthenticationInitial()) {
     on<ValidateAuthenticationEvent>((event, emit) async {
       await emit.forEach(
-        FirebaseAuth.instance.authStateChanges(),
+        _firebaseAuth.authStateChanges(),
         onData: (user) {
           if (user == null) {
             return const Unauthenticated();
@@ -42,7 +49,7 @@ class AuthenticationBloc
     });
 
     on<RequestSignOutEvent>((event, emit) async {
-      await FirebaseAuth.instance.signOut();
+      await _firebaseAuth.signOut();
       await GoogleSignIn().signOut();
     });
   }
@@ -63,9 +70,8 @@ class AuthenticationBloc
     final OAuthCredential oAuthCredential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
-    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     final UserCredential userCredential =
-        await firebaseAuth.signInWithCredential(oAuthCredential);
+        await _firebaseAuth.signInWithCredential(oAuthCredential);
     final User? user = userCredential.user;
 
     if (user == null) {
@@ -73,7 +79,7 @@ class AuthenticationBloc
     }
 
     // save user detail
-    FirebaseFirestore.instance.collection('members').doc(user.uid).set(
+    _firebaseFirestore.collection('members').doc(user.uid).set(
         UserDetail(
                 uid: user.uid,
                 displayName: user.displayName ?? _defaultDisplayName,
