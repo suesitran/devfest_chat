@@ -1,10 +1,11 @@
-import 'package:devfest_chat/widgets/chat_widgets.dart';
+import 'package:devfest_chat/features/authenticated/public_chat_screen.dart';
+import 'package:devfest_chat/features/unauthenticated/unauthenticated_screen.dart';
+import 'package:devfest_chat/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_chat/generated/l10n.dart';
 import 'package:devfest_chat/bloc/authentication/authentication_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:devfest_chat/bloc/chat/chat_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -23,7 +24,20 @@ class MainScreen extends StatelessWidget {
                           .read<AuthenticationBloc>()
                           .add(RequestSignOutEvent());
                     },
-                    child: Text(S.current.signOut));
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(25.0),
+                          child: Image.network(state.user.photoURL!,
+                              width: 45,
+                              height: 45,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  SvgPicture.asset(Assets.anonymous)),
+                        ),
+                        const SizedBox(width: 8.0,),
+                        Text(S.current.signOut)
+                      ],
+                    ));
               }
 
               return const SizedBox.shrink();
@@ -33,10 +47,6 @@ class MainScreen extends StatelessWidget {
       ),
       body: BlocConsumer<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
-          if (state is Authenticated) {
-            context.read<ChatBloc>().add(LoadChatEvent(state.user));
-          }
-
           if (state is AuthenticationError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(S.current.error(state.error)),
@@ -45,50 +55,12 @@ class MainScreen extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is Authenticated) {
-            return BlocBuilder<ChatBloc, ChatState>(
-                builder: (context, state) {
-                  if (state is ChatLoaded) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Expanded(
-                              child: ListView(
-                                reverse: true,
-                                children: state.messages
-                                    .map((e) => ChatBubble(
-                                    text: e.message,
-                                    senderUid: e.senderUid,
-                                    isMine: e.senderUid == state.uid))
-                                    .toList(),
-                              )),
-                          MessageBoxView(
-                            onSend: (value) => context
-                                .read<ChatBloc>()
-                                .add(SendChatMessage(value)),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                });
+            return PublicChatScreen(
+              uid: state.user.uid,
+            );
           }
 
-          // not authenticated
-          return Center(
-            child: TextButton(
-              onPressed: () {
-                context
-                    .read<AuthenticationBloc>()
-                    .add(SignInWithGoogleEvent());
-              },
-              child: Text(S.current.signIn),
-            ),
-          );
+          return const UnauthenticatedView();
         },
       ));
 }

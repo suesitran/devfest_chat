@@ -27,7 +27,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               )
               .snapshots(includeMetadataChanges: true), onData: (data) {
         return ChatLoaded(
-            event.user.uid, data.docs.map((e) => e.data()).toList());
+            event.uid, data.docs.map((e) => e.data()).toList());
       });
     });
 
