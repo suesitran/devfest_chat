@@ -44,15 +44,14 @@ class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
         .get(const GetOptions(source: Source.serverAndCache));
 
     _chatSession = model.startChat(
-      history: history.docs.map((e) {
-        if (e.data().senderUid == _modelName) {
-          return Content.model(
-              [TextPart(e.data().time.toString()), TextPart(e.data().message)]);
-        }
-
-        return Content.multi(
-            [TextPart(e.data().time.toString()), TextPart(e.data().message)]);
-      }).toList(),
+      // history: history.docs.map((e) {
+      //   if (e.data().senderUid == _modelName) {
+      //     return Content.model(
+      //         [TextPart('${e.data().time.toString()}, ${e.data().message}')]);
+      //   }
+      //
+      //   return Content.text('${e.data().time.toString()}, ${e.data().message}');
+      // }).toList(),
       generationConfig: GenerationConfig(
         temperature: 0.8,
       ),
