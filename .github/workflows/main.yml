@@ -32,7 +32,7 @@ jobs:
     - name: Install Flutter
       uses: subosito/flutter-action@v2.12.0
       with:
-        flutter-version: '3.16.0'
+        flutter-version: '3.24.3'
         channel: 'stable'
     - name: build apk debug
       run: flutter build apk --debug
@@ -58,7 +58,7 @@ jobs:
       if: ${{ steps.ios-validation.outputs.can_run > 0 }}
       uses: subosito/flutter-action@v2.8.0
       with:
-        flutter-version: '3.16.0'
+        flutter-version: '3.24.3'
         channel: 'stable'
     - name: build iOS no codesign
       if: ${{ steps.ios-validation.outputs.can_run > 0 }}
