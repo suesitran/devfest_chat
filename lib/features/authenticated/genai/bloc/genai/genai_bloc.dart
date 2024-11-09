@@ -42,7 +42,7 @@ class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
           toFirestore: (value, options) => value.toMap(),
         )
         .get(const GetOptions(source: Source.serverAndCache));
-
+    
     _chatSession = model.startChat(
       history: history.docs.map((e) {
         if (e.data().senderUid == _modelName) {
@@ -65,6 +65,12 @@ class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
       //   SafetySetting(HarmCategory.unspecified, HarmBlockThreshold.low)
       // ]
     );
+    
+    _chatSession?.sendMessage(Content.multi([
+      TextPart('Act as a friendly and funny chat bot to chat with user'),
+      TextPart('Always response in user\'s language'),
+      TextPart('And if asked, your name is GemiVin, which means Gemini for Vietnam'),
+    ]));
 
     add(StartChatStreaming());
   }
