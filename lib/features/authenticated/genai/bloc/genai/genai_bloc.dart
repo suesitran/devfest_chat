@@ -44,14 +44,14 @@ class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
         .get(const GetOptions(source: Source.serverAndCache));
 
     _chatSession = model.startChat(
-      // history: history.docs.map((e) {
-      //   if (e.data().senderUid == _modelName) {
-      //     return Content.model(
-      //         [TextPart('${e.data().time.toString()}, ${e.data().message}')]);
-      //   }
-      //
-      //   return Content.text('${e.data().time.toString()}, ${e.data().message}');
-      // }).toList(),
+      history: history.docs.map((e) {
+        if (e.data().senderUid == _modelName) {
+          return Content.model(
+              [TextPart('${e.data().time.toString()}, ${e.data().message}')]);
+        }
+
+        return Content.text('${e.data().time.toString()}, ${e.data().message}');
+      }).toList(),
       generationConfig: GenerationConfig(
         temperature: 0.8,
       ),
@@ -100,9 +100,12 @@ class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
                 senderUid: event.sender,
                 message: event.message)
             .toMap());
-    final GenerateContentResponse? response = await _chatSession?.sendMessage(
-        Content.text(
-            '${event.message}, please response casually, and make it short'));
+    final GenerateContentResponse? response =
+        await _chatSession?.sendMessage(Content.multi([
+      TextPart(event.message),
+      TextPart('please response casually, and make it short'),
+      TextPart('response in the same language the user is using')
+    ]));
 
     if (response == null) {
       // do nothing
