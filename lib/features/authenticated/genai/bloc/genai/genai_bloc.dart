@@ -67,6 +67,7 @@ class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
     );
     
     _chatSession?.sendMessage(Content.multi([
+      TextPart('You are chatting with ${event.displayName}'),
       TextPart('Act as a friendly and funny chat bot to chat with user'),
       TextPart('Always response in user\'s language'),
       TextPart('And if asked, your name is GemiVin, which means Gemini for Vietnam'),

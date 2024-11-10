@@ -6,12 +6,13 @@ import '../../../widgets/chat_widgets.dart';
 
 class GenaiScreen extends StatelessWidget {
   final String uid;
+  final String displayName;
 
-  const GenaiScreen({required this.uid, super.key});
+  const GenaiScreen({required this.uid, required this.displayName, super.key});
 
   @override
   Widget build(BuildContext context) => BlocProvider<GenaiBloc>(
-        create: (context) => GenaiBloc(uid: uid)..add(StartChat()),
+        create: (context) => GenaiBloc(uid: uid)..add(StartChat(displayName)),
         child: _GenaiBody(),
       );
 }

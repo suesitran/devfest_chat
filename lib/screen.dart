@@ -52,7 +52,7 @@ class MainScreen extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is Authenticated) {
-            return AuthenticatedScreen(uid: state.user.uid);
+            return AuthenticatedScreen(uid: state.user.uid, displayName: state.user.displayName ?? 'Unknown',);
           }
 
           return const UnauthenticatedView();

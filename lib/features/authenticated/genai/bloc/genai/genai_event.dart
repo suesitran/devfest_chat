@@ -5,8 +5,12 @@ abstract class GenaiEvent extends Equatable {
 }
 
 class StartChat extends GenaiEvent {
+  final String displayName;
+
+  const StartChat(this.displayName);
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [displayName];
 }
 
 class StartChatStreaming extends GenaiEvent {
