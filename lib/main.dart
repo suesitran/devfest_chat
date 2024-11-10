@@ -1,5 +1,4 @@
 import 'package:devfest_chat/bloc/authentication/authentication_bloc.dart';
-import 'package:devfest_chat/bloc/chat/chat_bloc.dart';
 import 'package:devfest_chat/firebase_options.dart';
 import 'package:devfest_chat/generated/l10n.dart';
 import 'package:devfest_chat/screen.dart';
@@ -25,16 +24,9 @@ class MainApp extends StatelessWidget {
           S.delegate,
         ],
         supportedLocales: S.delegate.supportedLocales,
-        home: MultiBlocProvider(
-          providers: [
-            BlocProvider<AuthenticationBloc>(
-              create: (context) =>
-                  AuthenticationBloc()..add(ValidateAuthenticationEvent()),
-            ),
-            BlocProvider<ChatBloc>(
-              create: (context) => ChatBloc(),
-            ),
-          ],
+        home: BlocProvider<AuthenticationBloc>(
+          create: (context) =>
+              AuthenticationBloc()..add(ValidateAuthenticationEvent()),
           child: const MainScreen(),
         ));
   }

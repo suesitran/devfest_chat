@@ -1,4 +1,4 @@
-part of 'chat_bloc.dart';
+part of '../../public_chat/chat/chat_bloc.dart';
 
 abstract class ChatState extends Equatable {
   const ChatState();

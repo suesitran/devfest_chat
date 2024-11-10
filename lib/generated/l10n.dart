@@ -89,6 +89,16 @@ class S {
       args: [],
     );
   }
+
+  /// `GenAI`
+  String get genai {
+    return Intl.message(
+      'GenAI',
+      name: 'genai',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
