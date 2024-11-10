@@ -124,7 +124,7 @@ class _MessageBoxViewState extends State<MessageBoxView> {
               onTap: () => _sendMessage(_editingController.text),
             ),
             suffixIconConstraints: const BoxConstraints(minWidth: 50)),
-    onSubmitted: _sendMessage,
+        onSubmitted: _sendMessage,
       );
 
   InputBorder get inputBorder =>
@@ -133,13 +133,10 @@ class _MessageBoxViewState extends State<MessageBoxView> {
   void _sendMessage(String text) {
     final String? uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid != null) {
-      widget.onSend(Message(
-          time: DateTime.now().toUtc(),
-          senderUid: uid,
-          message: text));
+      widget.onSend(
+          Message(time: DateTime.now().toUtc(), senderUid: uid, message: text));
       _editingController.text = '';
     }
-
   }
 }
 

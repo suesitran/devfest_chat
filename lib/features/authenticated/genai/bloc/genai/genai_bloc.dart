@@ -42,36 +42,26 @@ class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
           toFirestore: (value, options) => value.toMap(),
         )
         .get(const GetOptions(source: Source.serverAndCache));
-    
-    _chatSession = model.startChat(
-      history: history.docs.map((e) {
-        if (e.data().senderUid == _modelName) {
-          return Content.model(
-              [TextPart('${e.data().time.toString()}, ${e.data().message}')]);
-        }
 
-        return Content.text('${e.data().time.toString()}, ${e.data().message}');
-      }).toList(),
-      generationConfig: GenerationConfig(
-        temperature: 0.8,
-      ),
-      // safetySettings: [
-      //   SafetySetting(
-      //       HarmCategory.dangerousContent, HarmBlockThreshold.medium),
-      //   SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.medium),
-      //   SafetySetting(HarmCategory.harassment, HarmBlockThreshold.medium),
-      //   SafetySetting(
-      //       HarmCategory.sexuallyExplicit, HarmBlockThreshold.medium),
-      //   SafetySetting(HarmCategory.unspecified, HarmBlockThreshold.low)
-      // ]
+    _chatSession = model.startChat(
+      history: [
+        Content.multi([
+          TextPart('You are chatting with ${event.displayName}'),
+          TextPart('Act as a friendly and funny chat bot to chat with user'),
+          TextPart('Always response in user\'s language'),
+          TextPart(
+              'And if asked, your name is GemiVin, which means Gemini for Vietnam. The name Gemini is not to be translated to any language'),
+        ]),
+        ...history.docs.map((e) {
+          if (e.data().senderUid == _modelName) {
+            return Content.model(
+                [TextPart(e.data().message)]);
+          }
+
+          return Content.text(e.data().message);
+        }).toList()
+      ],
     );
-    
-    _chatSession?.sendMessage(Content.multi([
-      TextPart('You are chatting with ${event.displayName}'),
-      TextPart('Act as a friendly and funny chat bot to chat with user'),
-      TextPart('Always response in user\'s language'),
-      TextPart('And if asked, your name is GemiVin, which means Gemini for Vietnam'),
-    ]));
 
     add(StartChatStreaming());
   }
@@ -107,25 +97,28 @@ class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
                 senderUid: event.sender,
                 message: event.message)
             .toMap());
-    final GenerateContentResponse? response =
-        await _chatSession?.sendMessage(Content.multi([
-      TextPart(event.message),
-      TextPart('please response casually, and make it short'),
-      TextPart('response in the same language the user is using')
-    ]));
 
-    if (response == null) {
-      // do nothing
-    } else {
-      _firebaseFirestore
-          .collection(_collectionGenAI)
-          .doc(state.uid)
-          .collection(_collectionChatMessages)
-          .add(Message(
-                  time: DateTime.now(),
-                  senderUid: _modelName,
-                  message: response.text ?? 'Sorry I\'m unable to answer that.')
-              .toMap());
+    String rep;
+    try {
+      final GenerateContentResponse? response =
+          await _chatSession?.sendMessage(Content.multi([
+        TextPart(event.message),
+        TextPart('response in the same language the user is using')
+      ]));
+      rep = response?.text ?? 'Unable to response by text';
+    } on GenerativeAIException catch (e) {
+      rep = 'Unable to response because ${e.message}';
+    } on GenerativeAISdkException catch (e) {
+      rep = 'Unable to response because ${e.message}';
+    } catch (e) {
+      rep = 'Unable to response ${e.toString()}';
     }
+
+    _firebaseFirestore
+        .collection(_collectionGenAI)
+        .doc(state.uid)
+        .collection(_collectionChatMessages)
+        .add(Message(time: DateTime.now(), senderUid: _modelName, message: rep)
+            .toMap());
   }
 }
