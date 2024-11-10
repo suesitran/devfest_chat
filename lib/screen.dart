@@ -1,3 +1,4 @@
+import 'package:devfest_chat/bloc/remote_config/remote_config_controller_bloc.dart';
 import 'package:devfest_chat/features/authenticated/authenticated_screen.dart';
 import 'package:devfest_chat/features/unauthenticated/unauthenticated_screen.dart';
 import 'package:devfest_chat/widgets/chat_widgets.dart';
@@ -52,7 +53,14 @@ class MainScreen extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is Authenticated) {
-            return AuthenticatedScreen(uid: state.user.uid, displayName: state.user.displayName ?? 'Unknown',);
+            return BlocSelector<RemoteConfigControllerBloc, RemoteConfigControllerState, bool>(
+              selector: (state) {
+                if (state is RemoteConfigUpdatedState) {
+                  return state.values[genAiKey] ?? false;
+                }
+                return false;
+              },
+                builder: (context, genAi) => AuthenticatedScreen(uid: state.user.uid, displayName: state.user.displayName ?? 'Unknown', genAI: genAi));
           }
 
           return const UnauthenticatedView();
