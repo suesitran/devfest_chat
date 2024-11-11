@@ -29,11 +29,10 @@ class MainApp extends StatelessWidget {
           providers: [
             BlocProvider<AuthenticationBloc>(
               create: (context) =>
-              AuthenticationBloc()..add(ValidateAuthenticationEvent()),
+                  AuthenticationBloc()..add(ValidateAuthenticationEvent()),
             ),
             BlocProvider<RemoteConfigControllerBloc>(
-              create: (context) => RemoteConfigControllerBloc()
-            )
+                create: (context) => RemoteConfigControllerBloc())
           ],
           child: const MainScreen(),
         ));

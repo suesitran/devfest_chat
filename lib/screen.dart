@@ -53,14 +53,9 @@ class MainScreen extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is Authenticated) {
-            return BlocSelector<RemoteConfigControllerBloc, RemoteConfigControllerState, bool>(
-              selector: (state) {
-                if (state is RemoteConfigUpdatedState) {
-                  return state.values[genAiKey] ?? false;
-                }
-                return false;
-              },
-                builder: (context, genAi) => AuthenticatedScreen(uid: state.user.uid, displayName: state.user.displayName ?? 'Unknown', genAI: genAi));
+            return AuthenticatedScreen(
+                uid: state.user.uid,
+                displayName: state.user.displayName ?? 'Unknown');
           }
 
           return const UnauthenticatedView();

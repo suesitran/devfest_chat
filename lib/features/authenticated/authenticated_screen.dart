@@ -1,19 +1,17 @@
+import 'package:devfest_chat/bloc/remote_config/remote_config_controller_bloc.dart';
 import 'package:devfest_chat/features/authenticated/genai/genai_screen.dart';
 import 'package:devfest_chat/features/authenticated/public_chat/public_chat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../generated/l10n.dart';
 
 class AuthenticatedScreen extends StatefulWidget {
   final String uid;
   final String displayName;
-  final bool genAI;
 
   const AuthenticatedScreen(
-      {required this.uid,
-      required this.displayName,
-      required this.genAI,
-      super.key});
+      {required this.uid, required this.displayName, super.key});
 
   @override
   State<AuthenticatedScreen> createState() => _AuthenticatedScreenState();
@@ -36,16 +34,13 @@ enum AuthenticatedTabs {
 
 class _AuthenticatedScreenState extends State<AuthenticatedScreen>
     with TickerProviderStateMixin {
-  late final TabController _controller =
-      TabController(length: widget.genAI ? 2 : 1, vsync: this);
+  late final TabController _controller = TabController(length: 2, vsync: this);
 
   @override
   Widget build(BuildContext context) => Column(
         children: [
           TabBar(
-            tabs: widget.genAI
-                ? AuthenticatedTabs.values.map((e) => e.widget).toList()
-                : [AuthenticatedTabs.publicChat.widget],
+            tabs: AuthenticatedTabs.values.map((e) => e.widget).toList(),
             controller: _controller,
           ),
           Expanded(
@@ -54,11 +49,10 @@ class _AuthenticatedScreenState extends State<AuthenticatedScreen>
             controller: _controller,
             children: [
               PublicChatScreen(uid: widget.uid),
-              if (widget.genAI)
-                GenaiScreen(
-                  uid: widget.uid,
-                  displayName: widget.displayName,
-                )
+              GenaiScreen(
+                uid: widget.uid,
+                displayName: widget.displayName,
+              )
             ],
           ))
         ],
