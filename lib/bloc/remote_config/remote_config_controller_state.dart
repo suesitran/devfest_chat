@@ -10,10 +10,10 @@ final class RemoteConfigControllerInitial extends RemoteConfigControllerState {
 }
 
 final class RemoteConfigUpdatedState extends RemoteConfigControllerState {
-  final Map<String, dynamic> values;
+  final bool genAi;
 
-  const RemoteConfigUpdatedState(this.values);
+  const RemoteConfigUpdatedState(this.genAi);
 
   @override
-  List<Object?> get props => [...values.keys, ...values.values];
+  List<Object?> get props => [genAi];
 }

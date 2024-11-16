@@ -1,4 +1,3 @@
-import 'package:devfest_chat/bloc/remote_config/remote_config_controller_bloc.dart';
 import 'package:devfest_chat/features/authenticated/authenticated_screen.dart';
 import 'package:devfest_chat/features/unauthenticated/unauthenticated_screen.dart';
 import 'package:devfest_chat/widgets/chat_widgets.dart';

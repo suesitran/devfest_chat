@@ -58,7 +58,7 @@ class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
           }
 
           return Content.text(e.data().message);
-        }).toList()
+        })
       ],
     );
 

@@ -1,8 +1,6 @@
-import 'package:devfest_chat/bloc/remote_config/remote_config_controller_bloc.dart';
 import 'package:devfest_chat/features/authenticated/genai/genai_screen.dart';
 import 'package:devfest_chat/features/authenticated/public_chat/public_chat_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../generated/l10n.dart';
 
