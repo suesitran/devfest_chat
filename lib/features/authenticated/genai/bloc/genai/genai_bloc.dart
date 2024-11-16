@@ -54,12 +54,11 @@ class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
         ]),
         ...history.docs.map((e) {
           if (e.data().senderUid == _modelName) {
-            return Content.model(
-                [TextPart(e.data().message)]);
+            return Content.model([TextPart(e.data().message)]);
           }
 
           return Content.text(e.data().message);
-        }).toList()
+        })
       ],
     );
 

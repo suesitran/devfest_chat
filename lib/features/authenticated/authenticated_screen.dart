@@ -8,7 +8,8 @@ class AuthenticatedScreen extends StatefulWidget {
   final String uid;
   final String displayName;
 
-  const AuthenticatedScreen({required this.uid, required this.displayName, super.key});
+  const AuthenticatedScreen(
+      {required this.uid, required this.displayName, super.key});
 
   @override
   State<AuthenticatedScreen> createState() => _AuthenticatedScreenState();
@@ -46,7 +47,10 @@ class _AuthenticatedScreenState extends State<AuthenticatedScreen>
             controller: _controller,
             children: [
               PublicChatScreen(uid: widget.uid),
-              GenaiScreen(uid: widget.uid, displayName: widget.displayName,)
+              GenaiScreen(
+                uid: widget.uid,
+                displayName: widget.displayName,
+              )
             ],
           ))
         ],

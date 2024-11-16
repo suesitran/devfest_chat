@@ -7,7 +7,7 @@ abstract class GenaiState extends Equatable {
 }
 
 class GenaiInitial extends GenaiState {
-  GenaiInitial({required String uid}) : super(uid: uid, messages: []);
+  GenaiInitial({required super.uid}) : super(messages: []);
 
   @override
   List<Object> get props => [];
