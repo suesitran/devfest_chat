@@ -14,7 +14,6 @@ const String _collectionChatMessages = 'messages';
 
 class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
   final FirebaseFirestore _firebaseFirestore;
-  final String _apiKey = 'AIzaSyBdzct8an0515Cm82yvQai4k4pMkWSZ_HM';
   ChatSession? _chatSession;
 
   GenaiBloc({FirebaseFirestore? firebaseFirestore, required String uid})
@@ -28,7 +27,14 @@ class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
   }
 
   void _startChat(StartChat event, Emitter<GenaiState> emit) async {
-    final model = GenerativeModel(model: 'gemini-pro', apiKey: _apiKey);
+    // create your own API key from AI Studio https://aistudio.google.com/
+    // then run the code with '--dart-define=GEMINI_API=<your-api-key>'
+    const String apiKey = String.fromEnvironment('GEMINI_API');
+
+    if (apiKey.isEmpty) {
+      throw GenerativeAISdkException('API key is empty');
+    }
+    final model = GenerativeModel(model: 'gemini-pro', apiKey: apiKey);
 
     // collect all history
     final QuerySnapshot<Message> history = await _firebaseFirestore
