@@ -1,4 +1,5 @@
 import 'package:devfest_chat/bloc/authentication/authentication_bloc.dart';
+import 'package:devfest_chat/bloc/remote_config/remote_config_controller_bloc.dart';
 import 'package:devfest_chat/firebase_options.dart';
 import 'package:devfest_chat/generated/l10n.dart';
 import 'package:devfest_chat/screen.dart';
@@ -24,9 +25,15 @@ class MainApp extends StatelessWidget {
           S.delegate,
         ],
         supportedLocales: S.delegate.supportedLocales,
-        home: BlocProvider<AuthenticationBloc>(
-          create: (context) =>
-              AuthenticationBloc()..add(ValidateAuthenticationEvent()),
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider<AuthenticationBloc>(
+              create: (context) =>
+                  AuthenticationBloc()..add(ValidateAuthenticationEvent()),
+            ),
+            BlocProvider<RemoteConfigControllerBloc>(
+                create: (context) => RemoteConfigControllerBloc())
+          ],
           child: const MainScreen(),
         ));
   }
