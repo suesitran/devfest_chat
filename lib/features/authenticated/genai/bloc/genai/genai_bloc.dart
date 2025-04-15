@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:firebase_vertexai/firebase_vertexai.dart';
 
 import '../../../../../data/data.dart';
 
@@ -27,14 +27,7 @@ class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
   }
 
   void _startChat(StartChat event, Emitter<GenaiState> emit) async {
-    // create your own API key from AI Studio https://aistudio.google.com/
-    // then run the code with '--dart-define=GEMINI_API=<your-api-key>'
-    const String apiKey = String.fromEnvironment('GEMINI_API');
-
-    if (apiKey.isEmpty) {
-      throw GenerativeAISdkException('API key is empty');
-    }
-    final model = GenerativeModel(model: 'gemini-pro', apiKey: apiKey);
+    final model = FirebaseVertexAI.instance.generativeModel(model: 'gemini-2.0-flash');
 
     // collect all history
     final QuerySnapshot<Message> history = await _firebaseFirestore
@@ -112,10 +105,6 @@ class GenaiBloc extends Bloc<GenaiEvent, GenaiState> {
         TextPart('response in the same language the user is using')
       ]));
       rep = response?.text ?? 'Unable to response by text';
-    } on GenerativeAIException catch (e) {
-      rep = 'Unable to response because ${e.message}';
-    } on GenerativeAISdkException catch (e) {
-      rep = 'Unable to response because ${e.message}';
     } catch (e) {
       rep = 'Unable to response ${e.toString()}';
     }

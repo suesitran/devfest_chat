@@ -9,6 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // TODO: Integrate Firebase project using FirebaseCLI
+  // Link: https://firebase.google.com/docs/flutter/setup
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const MainApp());
